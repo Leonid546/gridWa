@@ -10,7 +10,7 @@ let url = 'https://my-json-server.typicode.com/RobocodeSchool/marketplace';
 
 let userRequest = new XMLHttpRequest();
 
-userRequest.open('GET', `${url}/user/${id}`);
+userRequest.open('GET', `${url}/users/${id}`);
 userRequest.responseType = 'json';
 
 
