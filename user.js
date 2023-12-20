@@ -1,0 +1,27 @@
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get('id');
+
+
+
+
+
+let profile = document.getElementById('profile');
+let url = 'https://my-json-server.typicode.com/RobocodeSchool/marketplace';
+
+let userRequest = new XMLHttpRequest();
+
+userRequest.open('GET', `${url}/user/${id}`);
+userRequest.responseType = 'json';
+
+
+
+userRequest.onload = function(){
+    let user = userRequest.response;
+        profile.innerHTML = `
+            <h1>${user.name}</h1>
+            <h2>${user.sirname}</h2>
+            <img src="${user.photo_url}" class="profile-img">
+            <p>Balance: ${user.balance}$</p>
+        `;
+    }
+userRequest.send();
