@@ -70,10 +70,33 @@ button{
 
 .profile-container{
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 70vh;
+    gap: 1rem;
+    /* min-height: 70vh; */
 }
+.user-products{
+    position: relative;
+}
+.user-products h1{
+    position: absolute;
+    left: 2rem;
+    top: -1.2rem;
+    color: #ffffff;
+    text-shadow: 0 0 10px #000000;
+
+}
+
+#user-products-grid{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    background-color: tomato;
+    padding: 2rem;
+    gap: 1rem;
+    border-radius: 1rem;
+}
+
 #profile{
     background-color: tomato;
     padding: 1rem 3rem;
@@ -112,4 +135,40 @@ button{
     #products-gird{
         grid-template-columns: repeat(1, 1fr);
     }
+}
+#cart-products::before{
+    content: '';
+    border: transparent solid 16px;
+    border-bottom: solid #000 16px;
+    top: -2.7rem;
+    left: 15.8rem;
+    z-index: -1;
+}
+#cart-products{
+    border: 1px solid #000;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    top: 59px;
+    right: 0rem;
+    /* left: -16rem; */
+    position: absolute;
+    padding: 10px;
+    text-align: left;
+
+}
+#cart-button{
+    background: none;
+border: none;
+border-radius: 50%;
+padding: 5px;
+border: 1px solid black;
+cursor: pointer;
+display: flex;
+justify-content: center;
+align-items: center;
+transition: all .5s;
+}
+
+.hide{
+    display: none;
 }
