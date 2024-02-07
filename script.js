@@ -1,9 +1,15 @@
 let productsGird = document.getElementById('products-gird');
 let productsArray = [];
 let xhr = new XMLHttpRequest();
-let url = 'https://my-json-server.typicode.com/RobocodeSchool/marketplace';
 
-xhr.open('GET', url + '/products');
+
+xhr.open("GET", "https://market-23f4.restdb.io/rest/product");
+
+xhr.setRequestHeader("content-type", "application/json");
+xhr.setRequestHeader("x-apikey", "659ec3e8907ee92516da4f05");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+
 xhr.responseType = 'json';
 xhr.onload = function(){
     productsArray = xhr.response;
@@ -19,8 +25,7 @@ xhr.onload = function(){
             <img src="${element.photo_url}" alt="${element.name}" class="product-photo">
             <p class="product-price"><b>Price: </b>${element.price}</p>
             <p class="product-description"><b>Description: </b>${element.description}</p>
-            <a href="userProfile.html?id=${element.author_id}">Seller profile</a>
-            <button onclick="addProductToCart(${element.id})">Buy</button>
+            <button onclick="addProductToCart('${element._id}')">Buy</button>
         `;
         productsGird.append(pElem);
     });
@@ -37,7 +42,7 @@ if(localStorage.getItem('cart')){
 
 function addProductToCart(id){
     let product = productsArray.find(function(p){
-        return p.id == id;
+        return p._id == id;
     });
     cart.push(product);
     drawCartProducts();
@@ -45,7 +50,7 @@ function addProductToCart(id){
 
     document.getElementById('cart-button').classList.add('active');
     setTimeout(function(){
-        document.getElementById("cart-button").classList.remove('active');
+        document.getElementById('cart-button').classList.remove('active');
 
     }, 500);
 }
@@ -65,14 +70,65 @@ function drawCartProducts(){
     <button onclick="buyAll()">Buy All</button>
     `;
 }
+let orderBlock = document.getElementById('order-block');
+let modal = document.getElementById('myModal');
+let span = document.getElementsByClassName('close')[0];
+
+span.onclick = function(){
+    modal.style.display = "none";
+}
+window.onclick = function(event){
+    if(event.target == modal){
+            modal.style.display = "none";
+    }
+}
 
 function buyAll(){
-    cart = [];
-    cartProd.innerHTML = 'not any money in you card';
-    localStorage.setItem("cart", '[]');
-    
+    modal.style.display = "block";
+    let sum = 0;
+    orderBlock.innerHTML = null;
+
+    cart.forEach(function(p){
+        orderBlock.innerHTML += `
+        <div class="item">
+            <img width="100px" src="${p.photo_url}"
+            <h2>${p.name} | ${p.price}$</h2>
+        </div>
+        `;
+        sum += p.price;
+    });
+    document.getElementById('price').innerHTML = sum + "$";
 }
 
 function openCart(){
-    cartProd.classList.toggle('hide');
+     cartProd.classList.toggle('hide');
 }
+
+// 659ec3e8907ee92516da4f05
+
+document.getElementById('order-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    let data = JSON.stringify({
+        "name": e.target['name'].value,
+        "address": e.target['address'].value,
+        "post_number": e.target['post_number'].value,
+        "status": "New",
+        "products": localStorage.getItem('cart')
+    });
+
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("POST", "https://market-23f4.restdb.io/rest/orders");
+    xhr.setRequestHeader("content-type", "application/json");
+    xhr.setRequestHeader("x-apikey", "659ec3e8907ee92516da4f05");
+    xhr.setRequestHeader("cache-control", "no-cache");
+
+    xhr.send(data);
+
+    modal.style.display = "none";
+    cart = [];
+    cartProd.innerHTML = 'cart is empty';
+    localStorage.setItem("cart", '[]');
+
+})
+
